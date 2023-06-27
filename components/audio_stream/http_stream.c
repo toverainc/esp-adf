@@ -396,7 +396,7 @@ static esp_err_t _resolve_playlist(audio_element_handle_t self, const char *uri)
                 if (http->hls_key->key_url == NULL) {
                     ESP_LOGE(TAG, "No memory for hls key url");
                     return ESP_FAIL;
-                } 
+                }
             }
             http->hls_key->sequence_no = hls_playlist_get_sequence_no(hls);
         }
@@ -555,7 +555,7 @@ _stream_redirect:
      * It overwrites URI pointer as well. Pay attention to that!
      */
     audio_element_set_total_bytes(self, info.total_bytes);
-    
+
     if (_is_playlist(&info, uri) == true) {
         /**
          * `goto _stream_open_begin` blocks on http_open until it gets valid URL.
@@ -681,8 +681,8 @@ static int _http_read(audio_element_handle_t self, char *buffer, int len, TickTy
         return ESP_OK;
     } else {
         if (http->hls_key) {
-            int ret = esp_aes_crypt_cbc(&http->hls_key->aes_ctx, ESP_AES_DECRYPT, 
-                 rlen, (unsigned char*)http->hls_key->key.iv, 
+            int ret = esp_aes_crypt_cbc(&http->hls_key->aes_ctx, ESP_AES_DECRYPT,
+                 rlen, (unsigned char*)http->hls_key->key.iv,
                  (unsigned char*)buffer, (unsigned char*)buffer);
             if (rlen % 16 != 0) {
                 ESP_LOGE(TAG, "Data length %d not aligned", rlen);
