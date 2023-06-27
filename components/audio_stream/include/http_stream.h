@@ -88,6 +88,7 @@ typedef struct {
     const char                  *cert_pem;              /*!< SSL server certification, PEM format as string, if the client requires to verify server */
     esp_err_t (*crt_bundle_attach)(void *conf);       /*!< Function pointer to esp_crt_bundle_attach. Enables the use of certification
                                                           bundle for server verification, must be enabled in menuconfig */
+    const char                  *user_agent;
 } http_stream_cfg_t;
 
 
@@ -110,6 +111,7 @@ typedef struct {
     .multi_out_num = 0,                          \
     .cert_pem  = NULL,                           \
     .crt_bundle_attach = NULL,                   \
+    .user_agent = NULL,                          \
 }
 
 /**
