@@ -85,7 +85,7 @@ void *audio_board_lcd_init(esp_periph_set_handle_t set, void *cb)
         .miso_io_num = -1,
         .quadwp_io_num = -1,
         .quadhd_io_num = -1,
-        .max_transfer_sz = 16 * LCD_H_RES * 2 + 8
+        .max_transfer_sz = 32768,
     };
     ESP_ERROR_CHECK(spi_bus_initialize(SPI2_HOST, &buscfg, SPI_DMA_CH_AUTO));
 
