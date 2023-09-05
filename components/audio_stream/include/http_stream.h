@@ -90,7 +90,7 @@ typedef struct {
                                                              bundle for server verification, must be enabled in menuconfig */
     int                         request_size;           /*!< Request data size each time from `http_client`
                                                              Defaults use DEFAULT_ELEMENT_BUFFER_LENGTH if set to 0
-                                                             Need care this setting if audio frame size is small and want low latency playback */                                                         
+                                                             Need care this setting if audio frame size is small and want low latency playback */
     int                         request_range_size;     /*!< Range size setting for header `Range: bytes=start-end`
                                                              Request full range of resource if set to 0
                                                              Range size bigger than request size is recommended */
