@@ -188,7 +188,7 @@ static void audio_recorder_vad_timer_expired(void *arg)
     audio_recorder_notify_events(recorder, RECORDER_EVENT_VAD_TIMER_EXPIRED);
 }
 
-static esp_err_t audio_recorder_afe_monitor(recorder_sr_result_t result, void *user_ctx)
+static esp_err_t audio_recorder_afe_monitor(afe_fetch_result_t *afr, recorder_sr_result_t result, void *user_ctx)
 {
     AUDIO_NULL_CHECK(TAG, user_ctx, return ESP_FAIL);
     audio_recorder_t *recorder = (audio_recorder_t *)user_ctx;
@@ -213,7 +213,7 @@ static esp_err_t audio_recorder_afe_monitor(recorder_sr_result_t result, void *u
     return ESP_OK;
 }
 
-static esp_err_t audio_recorder_mn_monitor(recorder_sr_result_t result, void *user_ctx)
+static esp_err_t audio_recorder_mn_monitor(afe_fetch_result_t *afr, recorder_sr_result_t result, void *user_ctx)
 {
     if (result >= 0) {
         return audio_recorder_send_msg(user_ctx, RECORDER_CMD_MN_DECT, (void *)result, 0);

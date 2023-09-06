@@ -194,7 +194,7 @@ static esp_err_t recorder_mn_detect(recorder_sr_t *recorder_sr, int16_t *buffer,
             }
 
             if (recorder_sr->mn_monitor) {
-                recorder_sr->mn_monitor(mn_result->phrase_id[0], recorder_sr->mn_monitor_ctx);
+                recorder_sr->mn_monitor(NULL, mn_result->phrase_id[0], recorder_sr->mn_monitor_ctx);
             }
 #if CONFIG_IDF_TARGET_ESP32
             recorder_sr_enable_wakenet_aec(recorder_sr);
@@ -210,7 +210,7 @@ static esp_err_t recorder_mn_detect(recorder_sr_t *recorder_sr, int16_t *buffer,
             esp_mn_results_t *mn_result = multinet->get_results(recorder_sr->mn_handle);
             printf("ESP MN detected other text:%s\n", mn_result->string);
             ESP_LOGI(TAG, "MN TIMEOUT - No valid command detected");
-            recorder_sr->mn_monitor(0, recorder_sr->mn_monitor_ctx);
+            recorder_sr->mn_monitor(NULL, 0, recorder_sr->mn_monitor_ctx);
 
             return ESP_OK;
         }
@@ -271,7 +271,7 @@ static void fetch_task(void *parameters)
         recorder_mn_detect(recorder_sr, res->data, res->wakeup_state);
 #endif
         if (recorder_sr->afe_monitor) {
-            recorder_sr->afe_monitor(recorder_sr_afe_result_convert(recorder_sr, res), recorder_sr->afe_monitor_ctx);
+            recorder_sr->afe_monitor(res, recorder_sr_afe_result_convert(recorder_sr, res), recorder_sr->afe_monitor_ctx);
         }
         recorder_sr_output(recorder_sr, res->data, res->data_size);
     }

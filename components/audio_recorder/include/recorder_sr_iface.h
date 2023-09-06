@@ -25,6 +25,7 @@
 #ifndef __RECORDER_SR_IFACE_H__
 #define __RECORDER_SR_IFACE_H__
 
+#include "esp_afe_sr_iface.h"
 #include "esp_err.h"
 #include "recorder_subproc_iface.h"
 
@@ -61,7 +62,7 @@ typedef struct {
 /**
  * @brief Monitor of the recorder speech recognition
  */
-typedef esp_err_t (*recorder_sr_monitor_t)(recorder_sr_result_t result, void *user_ctx);
+typedef esp_err_t (*recorder_sr_monitor_t)(afe_fetch_result_t *afr, recorder_sr_result_t result, void *user_ctx);
 
 typedef struct {
     /**
