@@ -195,6 +195,7 @@ static esp_err_t audio_recorder_afe_monitor(afe_fetch_result_t *afr, recorder_sr
     switch (result) {
         case SR_RESULT_VERIFIED:
             ESP_LOGI(TAG, "wake word audio volume: %f", afr->data_volume);
+            recorder->user_data = (void *)&afr->data_volume;
             break;
         case SR_RESULT_NOISE:
             audio_recorder_notify_events(recorder, RECORDER_EVENT_NOISE_DECT);
