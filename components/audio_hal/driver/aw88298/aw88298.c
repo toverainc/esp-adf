@@ -8,10 +8,6 @@
 #define AW88298_ADDR 0x36
 #define AW88298_REG_SYSCTL 0x04
 
-#define AW9523_ADDR 0x58
-
-#define AXP2101_ADDR 0x34
-
 #define AW_ASSERT(a, format, b, ...) \
     if ((a) != 0) { \
         ESP_LOGE(TAG, format, ##__VA_ARGS__); \
@@ -39,89 +35,24 @@ static esp_err_t aw88298_read_reg(uint8_t reg_addr, uint16_t *data)
     return ret;
 }
 
-static esp_err_t aw9523_write_reg(uint8_t reg_addr, uint8_t data)
-{
-    ESP_LOGI(TAG, "aw9523: writing %04x" PRIu8 " to I2C register %02x" PRIu8, data, reg_addr);
-    return i2c_bus_write_bytes(i2c_handle, AW9523_ADDR, &reg_addr, sizeof(reg_addr), &data, sizeof(data));
-}
-
-static esp_err_t axp2101_read_reg(uint8_t reg_addr, uint8_t *data)
-{
-    esp_err_t ret = ESP_OK;
-    ret = i2c_bus_read_bytes(i2c_handle, AXP2101_ADDR, &reg_addr, sizeof(reg_addr), data, sizeof(data));
-    ESP_LOGI(TAG, "axp2101: read %02x" PRIu8 " from I2C register %02x" PRIu8, *data, reg_addr);
-    return ret;
-}
-
-static esp_err_t axp2101_write_reg(uint8_t reg_addr, uint8_t data)
-{
-    ESP_LOGI(TAG, "axp2101: writing %02x" PRIu8 " to I2C register %02x" PRIu8, data, reg_addr);
-    return i2c_bus_write_bytes(i2c_handle, AXP2101_ADDR, &reg_addr, sizeof(reg_addr), &data, sizeof(data));
-}
-
-static void axp2101_turn_on_bl(void)
-{
-    uint8_t cfg = 0;
-    axp2101_read_reg(0x90, &cfg);
-    axp2101_write_reg(0x90, cfg | 0x80);
-    // from 0.5V to 3.5V 100mv/step
-    // 0b00000  0.5V
-    // 0b11110  3.5V
-    axp2101_write_reg(0x99, 0b11110 - 5);  // DLDO1
-}
-
 static int i2c_init()
 {
     ESP_LOGI(TAG, "i2c_init()");
     int res = 0;
     i2c_config_t aw_i2c_cfg = {
         .mode = I2C_MODE_MASTER,
-        .sda_pullup_en = GPIO_PULLUP_DISABLE,
-        .scl_pullup_en = GPIO_PULLUP_DISABLE,
+        .sda_pullup_en = GPIO_PULLUP_ENABLE,
+        .scl_pullup_en = GPIO_PULLUP_ENABLE,
         .master.clk_speed = 100000,
     };
-    res = get_i2c_pins(I2C_NUM_1, &aw_i2c_cfg);
+    res = get_i2c_pins(I2C_NUM_0, &aw_i2c_cfg);
     AW_ASSERT(res, "getting i2c pins error", -1);
     ESP_LOGI(TAG, "sca=%d scl=%d", aw_i2c_cfg.sda_io_num, aw_i2c_cfg.scl_io_num);
-    i2c_handle = i2c_bus_create(I2C_NUM_1, &aw_i2c_cfg);
+    i2c_handle = i2c_bus_create(I2C_NUM_0, &aw_i2c_cfg);
     if (i2c_handle == NULL) {
         ESP_LOGE(TAG, "failed to initialize I2C bus");
     }
     return res;
-}
-
-// AW9523B is a 16 port GPIO expander
-// from CoreS3-Box repo
-static esp_err_t aw9523_init(void) {
-    esp_err_t ret = ESP_OK;
-
-    // software reset
-    ret |= aw9523_write_reg(0x7F, 0x00);    // Int_Port1
-    vTaskDelay(30);
-
-    // aw9523 default settings
-
-    // set pin directions (0 = output, 1 = input)
-    ret |= aw9523_write_reg(0x04, 0xd8);    // Config_Port0     0b11011000
-    ret |= aw9523_write_reg(0x05, 0x7c);    // Config_Port1     0b01111100
-
-    // set pin mode (0 = LED, 1 = GPIO)
-    ret |= aw9523_write_reg(0x12, 0xff);    // LED Mode Switch  0b11111111
-    ret |= aw9523_write_reg(0x13, 0xff);    // LED Mode Switch  0b11111111
-
-    // set P0 port GPIO output mode (bit 4 = 1 --> Push-Pull mode)
-    ret |= aw9523_write_reg(0x11, 0x10);    // CTL              0b00010001
-
-    // set GPIO output value (0 = low, 1 = high)
-    // this resets FT6336U and ES7210
-    ret |= aw9523_write_reg(0x02, 0x05);    // Output_Port0     0b00000101
-    // this resets GC0308 and ?
-    ret |= aw9523_write_reg(0x03, 0x03);    // Output_Port1     0b00000011
-
-    if (ret != ESP_OK) {
-        ESP_LOGE(TAG, "failed to initialize AW9523 GPIO expander: %s", esp_err_to_name(ret));
-    }
-    return ret;
 }
 
 esp_err_t aw88298_codec_deinit()
@@ -139,11 +70,10 @@ esp_err_t aw88298_codec_init(audio_hal_codec_config_t *codec_cfg)
     //int coeff;
     esp_err_t ret = ESP_OK;
 
-    i2c_init();
-    aw9523_init();
-    vTaskDelay(100);
+    // return ret;
 
-    axp2101_turn_on_bl();
+    i2c_init();
+    vTaskDelay(100);
 
     // from CoreS3-Box repo
     aw88298_write_reg(0x61, 0x0673);

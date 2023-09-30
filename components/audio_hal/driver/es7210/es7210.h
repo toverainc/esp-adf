@@ -143,8 +143,8 @@ esp_err_t es7210_adc_ctrl_state(audio_hal_codec_mode_t mode, audio_hal_ctrl_t ct
 /**
  * @brief  Set gain (Note: the enabled microphone sets the same gain)
  *
- * @param[in] gain:  gain 
- * 
+ * @param[in] gain:  gain
+ *
  *       gain        :   value
  *       GAIN_0DB    :   1
  *       GAIN_3DB    :   2
@@ -196,7 +196,7 @@ esp_err_t es7210_set_mute(bool enable);
  * @brief Select ES7210 mic
  *
  * @param[in] mic:  mics
- * 
+ *
  * @return
  *     - ESP_FAIL
  *     - ESP_OK
@@ -207,7 +207,7 @@ esp_err_t es7210_mic_select(es7210_input_mics_t mic);
  * @brief Read regs of ES7210
  *
  * @param[in] reg_addr:  reg_addr
- * 
+ *
  * @return
  *     - ESP_FAIL
  *     - ESP_OK

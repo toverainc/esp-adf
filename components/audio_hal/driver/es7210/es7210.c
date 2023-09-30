@@ -32,13 +32,17 @@
 #define MCLK_DIV_FRE   256
 
 /* ES7210 address */
+#if defined(CONFIG_ESP32_S3_M5STACK_CORE_S3)
+#define ES7210_ADDR                   0x40
+#else
 #define ES7210_ADDR                   ES7210_AD1_AD0_00
+#endif
 #define ES7210_MCLK_SOURCE            FROM_CLOCK_DOUBLE_PIN                            /* In master mode, 0 : MCLK from pad    1 : MCLK from clock doubler */
 #define FROM_PAD_PIN                  0
 #define FROM_CLOCK_DOUBLE_PIN         1
 
 /* ES7210 mic select */
-#if CONFIG_ESP32_S3_KORVO2_V3_BOARD
+#if defined(CONFIG_ESP32_S3_KORVO2_V3_BOARD)
 #define ES7210_MIC_SELECT             ES7210_INPUT_MIC1 | ES7210_INPUT_MIC2 | ES7210_INPUT_MIC3
 #else
 #define ES7210_MIC_SELECT             ES7210_INPUT_MIC1 | ES7210_INPUT_MIC2
