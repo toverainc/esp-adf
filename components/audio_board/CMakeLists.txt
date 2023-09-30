@@ -115,6 +115,15 @@ set(COMPONENT_SRCS
 )
 endif()
 
+if (CONFIG_ESP32_S3_M5STACK_CORE_S3)
+message(STATUS "Current board name is " CONFIG_ESP32_S3_M5STACK_CORE_S3)
+list(APPEND COMPONENT_ADD_INCLUDEDIRS ./m5stack_cores3)
+set(COMPONENT_SRCS
+./m5stack_cores3/board.c
+./m5stack_cores3/board_pins_config.c
+)
+endif()
+
 if (CONFIG_ESP32_C3_LYRA_V2_BOARD)
 message(STATUS "Current board name is " CONFIG_ESP32_C3_LYRA_V2_BOARD)
 list(APPEND COMPONENT_ADD_INCLUDEDIRS ./esp32_c3_lyra)
