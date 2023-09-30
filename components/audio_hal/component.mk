@@ -7,6 +7,9 @@ COMPONENT_ADD_INCLUDEDIRS := ./include ./driver/include
 COMPONENT_SRCDIRS := .
 COMPONENT_PRIV_INCLUDEDIRS := ./driver/include
 
+COMPONENT_ADD_INCLUDEDIRS += ./driver/aw88298
+COMPONENT_SRCDIRS += ./driver/aw88298
+
 COMPONENT_ADD_INCLUDEDIRS += ./driver/es8388 ./driver/es8374
 COMPONENT_SRCDIRS += ./driver/es8388 ./driver/es8374
 

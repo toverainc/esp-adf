@@ -1,4 +1,5 @@
 set(COMPONENT_ADD_INCLUDEDIRS ./include
+                            ./driver/aw88298
                             ./driver/es8388
                             ./driver/es8374
                             ./driver/es8311
@@ -10,7 +11,7 @@ set(COMPONENT_ADD_INCLUDEDIRS ./include
                             ./driver/tas5805m
                             ./driver/include)
 IF (NOT ((CONFIG_IDF_TARGET STREQUAL "esp32c3") OR (CONFIG_IDF_TARGET STREQUAL "esp32c6")))
-    list(APPEND COMPONENT_ADD_INCLUDEDIRS 
+    list(APPEND COMPONENT_ADD_INCLUDEDIRS
     ./driver/zl38063
     ./driver/zl38063/api_lib
     ./driver/zl38063/example_apps
@@ -23,6 +24,7 @@ set(COMPONENT_PRIV_REQUIRES audio_sal audio_board mbedtls esp_peripherals displa
 
 set(COMPONENT_SRCS ./audio_hal.c
                     ./audio_volume.c
+                    ./driver/aw88298/aw88298.c
                     ./driver/es8388/es8388.c
                     ./driver/es8388/headphone_detect.c
                     ./driver/es8374/es8374.c
@@ -36,7 +38,7 @@ set(COMPONENT_SRCS ./audio_hal.c
                     )
 
 IF (NOT ((CONFIG_IDF_TARGET STREQUAL "esp32c3") OR (CONFIG_IDF_TARGET STREQUAL "esp32c6")))
-    list(APPEND COMPONENT_SRCS 
+    list(APPEND COMPONENT_SRCS
     ./driver/zl38063/zl38063.c
     ./driver/zl38063/api_lib/vprocTwolf_access.c
     ./driver/zl38063/api_lib/vproc_common.c
