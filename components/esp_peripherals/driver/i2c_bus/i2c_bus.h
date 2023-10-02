@@ -43,6 +43,8 @@ typedef void *i2c_bus_handle_t;
  */
 i2c_bus_handle_t i2c_bus_create(i2c_port_t port, i2c_config_t *conf);
 
+esp_err_t i2c_bus_write_16(i2c_bus_handle_t bus, int addr, uint8_t *reg, int regLen, uint16_t *data);
+
 /**
  * @brief Write bytes to I2C bus
  *
