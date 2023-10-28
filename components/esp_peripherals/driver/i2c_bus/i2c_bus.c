@@ -197,11 +197,6 @@ esp_err_t i2c_bus_cmd_begin(i2c_bus_handle_t bus, i2c_cmd_handle_t cmd, portBASE
 esp_err_t i2c_bus_probe_addr(i2c_bus_handle_t bus, uint8_t addr)
 {
     I2C_BUS_CHECK(bus != NULL, "Handle error", ESP_FAIL);
-    /* Use 7 bit address here */
-    if (addr >= 0x80) {
-        ESP_LOGE(TAG, "I2C addr out of range");
-        return ESP_ERR_INVALID_ARG;
-    }
 
     i2c_bus_t *i2c_bus = (i2c_bus_t *) bus;
     mutex_lock(i2c_bus->bus_lock);
