@@ -575,6 +575,7 @@ _stream_open_begin:
     // if not initialize http client, initial it
     if (http->client == NULL) {
         esp_http_client_config_t http_cfg = {
+            .auth_type = HTTP_AUTH_TYPE_BASIC,
             .url = uri,
             .event_handler = _http_event_handle,
             .user_data = self,
