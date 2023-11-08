@@ -998,3 +998,9 @@ esp_err_t http_stream_set_server_cert(audio_element_handle_t el, const char *cer
     http->cert_pem = cert;
     return ESP_OK;
 }
+
+esp_http_client_handle_t http_stream_get_handle(audio_element_handle_t el)
+{
+    http_stream_t *http = (http_stream_t *)audio_element_getdata(el);
+    return http->client;
+}

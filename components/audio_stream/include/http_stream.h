@@ -28,6 +28,7 @@
 #include "audio_error.h"
 #include "audio_element.h"
 #include "audio_common.h"
+#include "esp_http_client.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -169,6 +170,16 @@ esp_err_t http_stream_fetch_again(audio_element_handle_t el);
  *     - ESP_OK on success
  */
 esp_err_t http_stream_set_server_cert(audio_element_handle_t el, const char *cert);
+
+/**
+ * @brief       Get ESP HTTP client handle
+ *
+ * @param       el  The http_stream element handle
+ *
+ * @return      The ESP HTTP client handle
+ *
+ */
+esp_http_client_handle_t http_stream_get_handle(audio_element_handle_t el);
 
 #ifdef __cplusplus
 }
