@@ -23,7 +23,7 @@
  */
 
 #include <string.h>
-#include "esp_wpa2.h"
+#include "esp_eap_client.h"
 #include "esp_event.h"
 #include "esp_log.h"
 #include "esp_smartconfig.h"
@@ -432,17 +432,17 @@ static esp_err_t _wifi_init(esp_periph_handle_t self)
         unsigned int client_crt_bytes = periph_wifi->wpa2_e_cfg->wpa2_e_cert_end - periph_wifi->wpa2_e_cfg->wpa2_e_cert_start;
         unsigned int client_key_bytes = periph_wifi->wpa2_e_cfg->wpa2_e_key_end - periph_wifi->wpa2_e_cfg->wpa2_e_key_start;
 
-        ESP_ERROR_CHECK(esp_wifi_sta_wpa2_ent_set_ca_cert((const unsigned char *)periph_wifi->wpa2_e_cfg->ca_pem_start, ca_pem_bytes));
-        ESP_ERROR_CHECK(esp_wifi_sta_wpa2_ent_set_cert_key((const unsigned char *)periph_wifi->wpa2_e_cfg->wpa2_e_cert_start, client_crt_bytes, \
+        ESP_ERROR_CHECK(esp_eap_client_set_ca_cert((const unsigned char *)periph_wifi->wpa2_e_cfg->ca_pem_start, ca_pem_bytes));
+        ESP_ERROR_CHECK(esp_eap_client_set_certificate_and_key((const unsigned char *)periph_wifi->wpa2_e_cfg->wpa2_e_cert_start, client_crt_bytes, \
                         (const unsigned char *)periph_wifi->wpa2_e_cfg->wpa2_e_key_start, client_key_bytes, NULL, 0));
-        ESP_ERROR_CHECK(esp_wifi_sta_wpa2_ent_set_identity((uint8_t *)periph_wifi->wpa2_e_cfg->eap_id, strlen(periph_wifi->wpa2_e_cfg->eap_id)));
+        ESP_ERROR_CHECK(esp_eap_client_set_identity((uint8_t *)periph_wifi->wpa2_e_cfg->eap_id, strlen(periph_wifi->wpa2_e_cfg->eap_id)));
         if (periph_wifi->wpa2_e_cfg->eap_method == EAP_PEAP || periph_wifi->wpa2_e_cfg->eap_method == EAP_TTLS) {
-            ESP_ERROR_CHECK(esp_wifi_sta_wpa2_ent_set_username((uint8_t *)periph_wifi->wpa2_e_cfg->eap_username, strlen(periph_wifi->wpa2_e_cfg->eap_username)));
-            ESP_ERROR_CHECK(esp_wifi_sta_wpa2_ent_set_password((uint8_t *)periph_wifi->wpa2_e_cfg->eap_password, strlen(periph_wifi->wpa2_e_cfg->eap_password)));
+            ESP_ERROR_CHECK(esp_eap_client_set_username((uint8_t *)periph_wifi->wpa2_e_cfg->eap_username, strlen(periph_wifi->wpa2_e_cfg->eap_username)));
+            ESP_ERROR_CHECK(esp_eap_client_set_password((uint8_t *)periph_wifi->wpa2_e_cfg->eap_password, strlen(periph_wifi->wpa2_e_cfg->eap_password)));
         }
 
 #if (ESP_IDF_VERSION >= ESP_IDF_VERSION_VAL(4, 0, 0))
-        ESP_ERROR_CHECK(esp_wifi_sta_wpa2_ent_enable());
+        ESP_ERROR_CHECK(esp_wifi_sta_enterprise_enable());
 #else
         esp_wpa2_config_t wpa2_config = WPA2_CONFIG_INIT_DEFAULT();
         ESP_ERROR_CHECK(esp_wifi_sta_wpa2_ent_enable(&wpa2_config));
